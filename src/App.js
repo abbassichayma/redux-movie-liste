@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import { getMovies } from './Redux/Action';
 import './App.css';
-
+import Movies from './component/Movies'
+import axios from 'axios'
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import CutumModal from './component/CutumModal'
 function App() {
+  const dispatch = useDispatch()
+  const movieCard = async () => {
+    try {
+      const { data } = await axios.get('https://movie-app-gmc.herokuapp.com/api/movies')
+      dispatch(getMovies(data))
+    }
+    catch (error) {
+      console.error(error)
+    }
+  }
+  useEffect(() => {
+    movieCard()
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Movies />
+      <CutumModal/>
     </div>
   );
 }
